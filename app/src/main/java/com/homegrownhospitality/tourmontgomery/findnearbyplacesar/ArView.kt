@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.codelabs.findnearbyplacesar
+package com.homegrownhospitality.tourmontgomery.findnearbyplacesar
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -37,17 +38,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.ar.sceneform.AnchorNode
-import com.google.codelabs.findnearbyplacesar.api.NearbyPlacesResponse
-import com.google.codelabs.findnearbyplacesar.api.PlacesService
-import com.google.codelabs.findnearbyplacesar.ar.PlaceNode
-import com.google.codelabs.findnearbyplacesar.ar.PlacesArFragment
-import com.google.codelabs.findnearbyplacesar.model.Place
-import com.google.codelabs.findnearbyplacesar.model.getPositionVector
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.api.NearbyPlacesResponse
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.api.PlacesService
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.ar.PlaceNode
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.ar.PlacesArFragment
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.model.Place
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.model.getPositionVector
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), SensorEventListener {
+class ArView : AppCompatActivity(), SensorEventListener {
 
     private val TAG = "MainActivity"
 
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val orientationAngles = FloatArray(3)
 
     private var anchorNode: AnchorNode? = null
+    private var anchors: MutableList<AnchorNode>? = null
     private var markers: MutableList<Marker> = emptyList<Marker>().toMutableList()
     private var places: List<Place>? = null
     private var currentLocation: Location? = null
@@ -79,27 +81,24 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         if (!isSupportedDevice()) {
             return
         }
-        setContentView(R.layout.activity_main)
+
+        locSearchType = intent.getStringExtra("placeType")
+        setContentView(R.layout.activity_ar)
 
         arFragment = supportFragmentManager.findFragmentById(R.id.ar_fragment) as PlacesArFragment
         mapFragment =
             supportFragmentManager.findFragmentById(R.id.maps_fragment) as SupportMapFragment
 
-        spinnerFragment = findViewById(R.id.locType)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.locTypes,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerFragment.adapter = adapter
+        val button: Button = findViewById(R.id.btnReturn)
+        button.setOnClickListener {
+            onBackPressed()
         }
+
 
         sensorManager = getSystemService()!!
         placesService = PlacesService.create()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        setUpSpinner()
         setUpAr()
         setUpMaps()
     }
@@ -127,20 +126,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    private fun setUpSpinner () {
-        spinnerFragment.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View, position: Int, id: Long) {
-                    locSearchType = parent.getItemAtPosition(position).toString()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>){
-
-                }
-            }
-    }
-
     private fun setUpAr() {
         arFragment.setOnTapArPlaneListener { hitResult, _, _ ->
             // Create anchor
@@ -149,6 +134,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             anchorNode?.setParent(arFragment.arSceneView.scene)
             addPlaces(anchorNode!!)
         }
+    }
+
+    private fun clearAnchors() {
+        if (!anchors.isNullOrEmpty()) {
+            for (anchor in anchors!!) {
+                anchor.setParent(null)
+            }
+        }
+    }
+    private fun clearMarkers() {
+        markers.clear()
     }
 
     private fun addPlaces(anchorNode: AnchorNode) {
@@ -161,11 +157,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val places = places
         if (places == null) {
             Log.w(TAG, "No places to put")
+
             return
         }
 
         for (place in places) {
             // Add the place in AR
+            anchors?.add(anchorNode)
             val placeNode = PlaceNode(this, place)
             placeNode.setParent(anchorNode)
             placeNode.localPosition = place.getPositionVector(orientationAngles[0], currentLocation.latLng)
@@ -185,6 +183,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
         }
     }
+
 
     private fun showInfoWindow(place: Place) {
         // Show in AR
@@ -240,7 +239,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         placesService.nearbyPlaces(
             apiKey = apiKey,
             location = "${location.latitude},${location.longitude}",
-            radiusInMeters = 2000,
+            radiusInMeters = 10000,
             placeType = locSearchType
         ).enqueue(
             object : Callback<NearbyPlacesResponse> {
@@ -258,7 +257,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     }
 
                     val places = response.body()?.results ?: emptyList()
-                    this@MainActivity.places = places
+                    this@ArView.places = places
                 }
             }
         )
@@ -298,6 +297,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             magnetometerReading
         )
         SensorManager.getOrientation(rotationMatrix, orientationAngles)
+
     }
 }
 
