@@ -22,11 +22,12 @@
     android:orientation="vertical"
     tools:context=".ArView">
 
-    <Button
-        android:id="@+id/btnReturn"
+    <fragment
+        android:id="@+id/ar_fragment"
+        android:name="com.homegrownhospitality.tourmontgomery.findnearbyplacesar.ar.PlacesArFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Go Back" />
+        android:layout_height="0dp"
+        android:layout_weight="7" />
 
     <fragment
         android:id="@+id/maps_fragment"
@@ -35,11 +36,10 @@
         android:layout_height="0dp"
         android:layout_weight="3" />
 
-    <fragment
-        android:id="@+id/ar_fragment"
-        android:name="com.homegrownhospitality.tourmontgomery.findnearbyplacesar.ar.PlacesArFragment"
+    <Button
+        android:id="@+id/btnReturn"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7" />
+        android:layout_height="wrap_content"
+        android:text="Go Back" />
 
 </LinearLayout>
