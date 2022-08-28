@@ -45,6 +45,16 @@ class Main : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View, position: Int, id: Long) {
                 locSearchType = parent.getItemAtPosition(position).toString()
+                when (locSearchType) {
+                    "Art Gallery" -> locSearchType = "art_gallery"
+                    "Bus Station" -> locSearchType = "bus_station"
+                    "Food (Takeaway)" -> locSearchType = "meal_takeaway"
+                    "Night Club" ->  locSearchType = "night_club"
+                    "Tourist Attractions" -> locSearchType = "tourist_attraction"
+                    else -> {
+                        locSearchType = locSearchType.toLowerCase()
+                    }
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>){
