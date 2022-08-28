@@ -82,7 +82,7 @@ class ArView : AppCompatActivity(), SensorEventListener {
             return
         }
 
-        locSearchType = intent.getStringExtra("placeType")
+        locSearchType = intent.getStringExtra("placeType").toString()
         setContentView(R.layout.activity_ar)
 
         arFragment = supportFragmentManager.findFragmentById(R.id.ar_fragment) as PlacesArFragment
