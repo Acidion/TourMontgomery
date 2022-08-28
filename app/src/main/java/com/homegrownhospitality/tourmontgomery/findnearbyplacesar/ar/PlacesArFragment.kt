@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.codelabs.findnearbyplacesar.ar
+package com.homegrownhospitality.tourmontgomery.findnearbyplacesar.ar
 
 import android.Manifest
 import com.google.ar.sceneform.ux.ArFragment

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.codelabs.findnearbyplacesar.api
+package com.homegrownhospitality.tourmontgomery.findnearbyplacesar.api
 
-import com.google.codelabs.findnearbyplacesar.model.Place
+import com.homegrownhospitality.tourmontgomery.findnearbyplacesar.model.Place
 import com.google.gson.annotations.SerializedName
 
 /**
