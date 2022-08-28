@@ -50,6 +50,7 @@ class Main : AppCompatActivity() {
                     "Bus Station" -> locSearchType = "bus_station"
                     "Food (Takeaway)" -> locSearchType = "meal_takeaway"
                     "Night Club" ->  locSearchType = "night_club"
+                    "Parks" -> locSearchType = "park"
                     "Tourist Attractions" -> locSearchType = "tourist_attraction"
                     else -> {
                         locSearchType = locSearchType.toLowerCase()

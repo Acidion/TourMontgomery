@@ -24,7 +24,7 @@ import kotlin.math.sin
  * A model describing details about a Place (location, name, type, etc.).
  */
 data class Place(
-    val id: String,
+    val place_id: String,
     val icon: String,
     val name: String,
     val geometry: Geometry
@@ -33,11 +33,11 @@ data class Place(
         if (other !is Place) {
             return false
         }
-        return this.id == other.id
+        return this.place_id == other.place_id
     }
 
     override fun hashCode(): Int {
-        return this.id.hashCode()
+        return this.place_id.hashCode()
     }
 }
 
