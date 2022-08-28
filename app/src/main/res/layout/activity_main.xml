@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
- Copyright 2020 Google LLC
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:foregroundTint="#673AB7"
+        android:foregroundTintMode="add"
+        android:text="Tour Montgomery"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        app:srcCompat="@drawable/mgmbackground" />
 
     <Spinner
         android:id="@+id/locType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <fragment android:name="com.google.codelabs.findnearbyplacesar.ar.PlacesArFragment"
-        android:id="@+id/ar_fragment"
+    <Button
+        android:id="@+id/btnOpenAR"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"/>
-
-    <fragment
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/maps_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"/>
+        android:layout_height="wrap_content"
+        android:text="Check your Surroundings" />
 
 </LinearLayout>
