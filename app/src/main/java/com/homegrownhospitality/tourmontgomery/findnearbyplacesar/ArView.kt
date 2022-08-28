@@ -239,7 +239,7 @@ class ArView : AppCompatActivity(), SensorEventListener {
         placesService.nearbyPlaces(
             apiKey = apiKey,
             location = "${location.latitude},${location.longitude}",
-            radiusInMeters = 10000,
+            radiusInMeters = 2000,
             placeType = locSearchType
         ).enqueue(
             object : Callback<NearbyPlacesResponse> {
